@@ -1,0 +1,83 @@
+version: "3.9"
+services:
+  mysql8:
+    container_name: mysql8
+    image: mysql:8
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: ms-users
+    volumes:
+      - data-mysql:/var/lib/mysql
+    restart: always
+    networks:
+      - spring
+  postgres14:
+    container_name: postgres14
+    image: postgres:14-alpine
+    ports:
+      - "5532:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ms-grades
+    volumes:
+      - data-postgres:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - spring
+  ms-users:
+    container_name: ms-users
+    image: spgomezinetum/users:latest
+    build:
+      context: ./
+      dockerfile: ./ms-users/Dockerfile
+    ports:
+      - "8001:8001"
+#    env_file:
+#      - ./ms-users/.env
+    environment:
+      PORT: 8001
+      DB_HOST: mysql8:3306
+      DB_DATABASE: ms_users
+      DB_USERNAME: root
+      DB_PASSWORD: admin
+      GRADES_URL: ms-grades:8002/api/v1/grade
+    restart: on-failure
+    networks:
+      - spring
+    depends_on:
+      - postgres14
+      - mysql8
+  ms-grades:
+    container_name: ms-grades
+    image: spgomezinetum/grades:latest
+    build:
+      context: ./
+      dockerfile: ./ms-grades/Dockerfile
+    ports:
+      - "8002:8002"
+#    env_file:
+#      - ./ms-grades/.env
+    environment:
+      PORT: 8002
+      DB_HOST: postgres14:5432
+      DB_DATABASE: ms_grades
+      DB_USERNAME: postgres
+      DB_PASSWORD: admin
+      USERS_URL: ms-users:8001/api/v1/user
+    restart: on-failure
+    networks:
+      - spring
+    depends_on:
+      - ms-users
+      - mysql8
+      - postgres14
+volumes:
+  data-mysql:
+    name: data-mysql
+  data-postgres:
+    name: data-postgres
+networks:
+  spring:
+    name: spring
