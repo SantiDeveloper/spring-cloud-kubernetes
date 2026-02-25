@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-grades
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-grades
+  template:
+    metadata:
+      labels:
+        app: ms-grades
+    spec:
+      containers:
+      - image: spgomezinetum/grades:latest
+        name: grades
+        ports:
+        - containerPort: 8002

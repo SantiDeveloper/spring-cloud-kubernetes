@@ -7,7 +7,7 @@ services:
       - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: ms-users
+      MYSQL_DATABASE: ms_users
     volumes:
       - data-mysql:/var/lib/mysql
     restart: always
@@ -20,7 +20,7 @@ services:
       - "5532:5432"
     environment:
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: ms-grades
+      POSTGRES_DB: ms_grades
     volumes:
       - data-postgres:/var/lib/postgresql/data
     restart: always
