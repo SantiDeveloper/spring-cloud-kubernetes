@@ -1,9 +1,12 @@
 package org.spgomez.springcloud.microservice.usuarios.controllers;
 
 import jakarta.validation.Valid;
+
 import org.spgomez.springcloud.microservice.usuarios.models.entity.User;
 import org.spgomez.springcloud.microservice.usuarios.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,6 +21,14 @@ public class UserController {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private ApplicationContext context;
+
+    @GetMapping("/crash")
+    public void crash(){
+        ((ConfigurableApplicationContext)context).close();
+    }
 
     @GetMapping
     public ResponseEntity<?> getAll(@RequestParam(required = false) List<Long> ids) {
