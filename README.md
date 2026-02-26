@@ -379,3 +379,32 @@ spec:
 ```bash
  minikube service ms-users --url
 ```
+
+#### Para eliminar deployments o services, simplemente usamos el comando:
+```bash
+ kubectl delete -f deployment-users.yaml
+ kubectl delete -f svc-users.yaml
+```
+
+#### Vamos a crear persistent volumes para las bases de datos mysql y postgres. Pueden revisarse en los archivos pv-mysql.yaml y pv-postgres.yaml respectivamente.
+#### Para crear un persistent volume, ejecutamos el siguiente comando:
+```bash
+ kubectl apply -f mysql-pv.yaml
+ kubectl apply -f postgres-pv.yaml
+```
+#### Luego, creamos los persistent volume claims para cada base de datos. Pueden revisarse en los archivos pvc-mysql.yaml y pvc-postgres.yaml respectivamente.
+```bash
+ kubectl apply -f mysql-pvc.yaml
+ kubectl apply -f postgres-pvc.yaml
+```
+#### Finalmente, adaptamos los deployments de mysql y postgres para montar los volúmenes persistentes en los contenedores. Se puede revisar en los archivos deployment-mysql.yaml y deployment-postgres.yaml respectivamente.
+#### Tambien podemos crear configmaps y secrets para almacenar la configuración y las credenciales de las bases de datos de manera segura. Pueden revisarse en los archivos configmap-db.yaml y secret-db.yaml respectivamente.
+#### Para crear un configmap, ejecutamos el siguiente comando:
+```bash
+ kubectl apply -f configmap.yaml
+```
+#### Para crear un secret, ejecutamos el siguiente comando:
+```bash
+ kubectl apply -f secret.yaml
+```
+

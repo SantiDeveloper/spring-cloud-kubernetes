@@ -17,3 +17,34 @@ spec:
         name: grades
         ports:
         - containerPort: 8002
+        env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: ms-grades
+                key: port
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: ms-grades
+                key: db_host
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: ms-grades
+                key: database
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ms-grades
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ms-grades
+                key: password
+          - name: USERS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: ms-grades
+                key: user_url

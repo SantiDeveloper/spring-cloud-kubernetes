@@ -17,3 +17,34 @@ spec:
         name: users
         ports:
         - containerPort: 8001
+        env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: ms-users
+                key: port
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: ms-users
+                key: db_host
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: ms-users
+                key: database
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: ms-users
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ms-users
+                key: password
+          - name: GRADES_URL
+            valueFrom:
+              configMapKeyRef:
+                name: ms-users
+                key: grade_url

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-users
+data:
+  port: "8001"
+  db_host: mysql8:3306
+  database: ms_users
+#  username: root
+#  password: admin
+  grade_url: ms-grades:8002
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-grades
+data:
+  port: "8002"
+  db_host: postgres14:5432
+  database: ms_grades
+#  username: postgres
+#  password: admin
+  user_url: ms-users:8001
