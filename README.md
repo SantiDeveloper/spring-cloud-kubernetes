@@ -408,3 +408,21 @@ spec:
  kubectl apply -f secret.yaml
 ```
 
+## Spring Cloud para Kubernetes
+#### Spring Cloud Kubernetes es un proyecto que facilita la integración de aplicaciones Spring Boot con Kubernetes, proporcionando características como descubrimiento de servicios, configuración centralizada y gestión de secretos.
+#### Para utilizar Spring Cloud Kubernetes en tus aplicaciones, primero debes agregar la dependencia correspondiente en los archivos pom.xml de tus microservicios.
+#### Habilitamos la anotacion @EnableDiscoveryClient en la clase principal de cada microservicio para permitir el descubrimiento de servicios en Kubernetes.
+#### Eliminamos del client la referencia a la url en la anotación FeignClient, ya que ahora se resolverá automáticamente a través del descubrimiento de servicios de Kubernetes.
+#### reconstruimos las imágenes de los microservicios y las subimos a Docker Hub.
+#### añadimos estas dos propiedades a cada microservicio para configurar el descubrimiento de servicios en Kubernetes:
+```properties
+ spring.cloud.kubernetes.secrets.enable-api=true
+ spring.cloud.kubernetes.discovery.all-namespaces=true
+```
+#### Creamos un clusterrolebinding para dar permisos de administrador a la cuenta de servicio por defecto en el namespace default, lo cual es necesario para que Spring Cloud Kubernetes pueda acceder a los recursos de Kubernetes y realizar el descubrimiento de servicios correctamente.
+```bash
+kubectl create clusterrolebinding admin --clusterrole=cluster-adm
+in --serviceaccount=default:default
+```
+#### Finalmente, aplicamos los cambios en el clúster de Kubernetes y verificamos que los microservicios puedan descubrirse entre sí utilizando el descubrimiento de servicios de Kubernetes.
+
